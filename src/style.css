@@ -14,7 +14,6 @@ html {
     
     font-family: "Bree Serif", Arial, sans-serif;
     background-color: #18c;
-    background-image: url("https://cdn.discordapp.com/attachments/1028301488105201744/1198630443625484308/steamcraft_You_find_youself_in_the_small_crowd_of_the_dancing_w_7177ff71-dd8a-4a8d-87e4-ea40c5a796a9.png?ex=65bf9a97&is=65ad2597&hm=95736a77221fb4c47bcea10d693b7d5ae5656eed9d1dbcce740dc287e0da06b1&");
     background-repeat: no-repeat;
     background-size: cover;
     color: #fff;
@@ -94,4 +93,45 @@ html {
     width: 100%;
     height: 100%;
     z-index: -1; /* Ensures the canvas is behind other content */
+}
+
+/* Style for the button */
+#audioControl {
+  font-size: 2em;
+  padding: 0.5em 1em;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+  margin-bottom: 2em; /* Add space below the button */
+}
+
+#audioControl:hover {
+  background-color: rgba(255, 255, 255, 0.7); /* More opaque on hover */
+}
+
+#subtitle {
+  margin-top: 1em;
+  color: #ffffff; /* Dark color for the subtitle text */
+  font-size: 5em; /* Large font size for subtitle */
+}
+
+.content {
+  position: relative;
+  z-index: 1; /* Make sure it's above the canvas */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#backgroundCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Place it behind the content */
 }

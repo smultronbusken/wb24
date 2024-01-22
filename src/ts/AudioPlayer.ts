@@ -19,6 +19,7 @@ class AudioPlayer {
     async loadAudio(url: string): Promise<ArrayBuffer> {
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
+        this.buffer = await this.decodeAudioData(arrayBuffer);
         return arrayBuffer;
     }
 
@@ -33,12 +34,11 @@ class AudioPlayer {
         return source;
     }
 
-    async playAudio(url: string): Promise<void> {
+    async playAudio(): Promise<void> {
+        if (!this.buffer) {
+            throw new Error("Can not play audio, not audio is loaded.")
+        }
         try {
-            if (!this.buffer) { // Load and decode buffer only if it's not already done
-                const arrayBuffer = await this.loadAudio(url);
-                this.buffer = await this.decodeAudioData(arrayBuffer);
-            }
             this.sourceNode = this.createAudioBufferSourceNode(this.buffer);
             this.sourceNode.connect(this.audioContext.destination);
             this.sourceNode.start(0, this.pauseTime); // Start from the pauseTime if any
@@ -58,8 +58,20 @@ class AudioPlayer {
     }
 
     resume(): void {
+        if (this.sourceNode && !this.isPlaying) {
+            this.sourceNode.start();
+            this.pauseTime = this.audioContext.currentTime - this.startTime; // Calculate the total played time
+            this.isPlaying = false;
+        }
+    }
+
+    getCurrentTime(): number {
         if (!this.isPlaying) {
-            this.playAudio(); // Call playAudio which now handles resuming from pauseTime
+            // If audio is paused, return the pause time
+            return this.pauseTime;
+        } else {
+            // If audio is playing, calculate current playback time
+            return (this.audioContext.currentTime - this.startTime);
         }
     }
 }
