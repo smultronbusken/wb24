@@ -17,9 +17,14 @@ class AudioPlayer {
     }
 
     async loadAudio(url: string): Promise<ArrayBuffer> {
+        if (this.isPlaying) {
+            this.stop(); // Pause current audio if it's playing
+        }
+    
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
         this.buffer = await this.decodeAudioData(arrayBuffer);
+        this.pauseTime = 0; // Reset pauseTime for new audio
         return arrayBuffer;
     }
 
@@ -36,18 +41,34 @@ class AudioPlayer {
 
     async playAudio(): Promise<void> {
         if (!this.buffer) {
-            throw new Error("Can not play audio, not audio is loaded.")
+            throw new Error("Cannot play audio, no audio is loaded.");
         }
+    
+        if (this.isPlaying && this.sourceNode) {
+            this.stop(); // Stop any currently playing audio
+        }
+    
         try {
             this.sourceNode = this.createAudioBufferSourceNode(this.buffer);
             this.sourceNode.connect(this.audioContext.destination);
-            this.sourceNode.start(0, this.pauseTime); // Start from the pauseTime if any
+            this.sourceNode.start(0, this.pauseTime); 
             this.startTime = this.audioContext.currentTime - this.pauseTime;
             this.isPlaying = true;
         } catch (error) {
             console.error('Error playing audio:', error);
         }
     }
+
+    stop(): void {
+        if (this.sourceNode && this.isPlaying) {
+            this.sourceNode.stop();
+            this.sourceNode.disconnect(); // Disconnect the sourceNode
+            this.sourceNode = null; // Dispose of the sourceNode
+            this.pauseTime = 0;
+            this.isPlaying = false;
+        }
+    }
+
 
     pause(): void {
         if (this.sourceNode && this.isPlaying) {
