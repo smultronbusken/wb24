@@ -1,6 +1,7 @@
 class AudioPlayer {
     private audioContext: AudioContext;
     private sourceNode: AudioBufferSourceNode | null;
+    private gainNode: GainNode;
 
     public isPlaying: boolean;
     private startTime: number;
@@ -14,13 +15,13 @@ class AudioPlayer {
         this.startTime = 0;
         this.pauseTime = 0;
         this.buffer = null; // Store the decoded buffer
+        this.gainNode = new GainNode(this.audioContext, {gain: -0.5});
     }
 
     async loadAudio(url: string): Promise<ArrayBuffer> {
         if (this.isPlaying) {
             this.stop(); // Pause current audio if it's playing
         }
-    
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
         this.buffer = await this.decodeAudioData(arrayBuffer);
@@ -40,6 +41,7 @@ class AudioPlayer {
     }
 
     async playAudio(): Promise<void> {
+
         if (!this.buffer) {
             throw new Error("Cannot play audio, no audio is loaded.");
         }
@@ -50,6 +52,7 @@ class AudioPlayer {
     
         try {
             this.sourceNode = this.createAudioBufferSourceNode(this.buffer);
+            this.sourceNode.connect(this.gainNode).connect(this.audioContext.destination);
             this.sourceNode.connect(this.audioContext.destination);
             this.sourceNode.start(0, this.pauseTime); 
             this.startTime = this.audioContext.currentTime - this.pauseTime;
@@ -58,6 +61,14 @@ class AudioPlayer {
             console.error('Error playing audio:', error);
         }
     }
+
+    setVolume(volume: number) {
+        console.log(volume)
+        console.log(this.gainNode.gain.defaultValue)
+        console.log(this.gainNode.gain.minValue)
+        this.gainNode.gain.value = volume;
+    }
+
 
     stop(): void {
         if (this.sourceNode && this.isPlaying) {
@@ -68,7 +79,6 @@ class AudioPlayer {
             this.isPlaying = false;
         }
     }
-
 
     pause(): void {
         if (this.sourceNode && this.isPlaying) {

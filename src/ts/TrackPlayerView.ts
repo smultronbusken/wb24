@@ -4,24 +4,47 @@ import { Cue } from "./SubtitleController";
 class TrackPlayerView {
     trackPlayer: TrackPlayer;
 
+    currentCue: Cue | undefined;
+
+
     constructor(trackPlayer: TrackPlayer) {
         this.trackPlayer = trackPlayer;
         trackPlayer.on("onPause", () => this.pauseAudio())
         trackPlayer.on("onPlay", () => this.playAudio())
-        trackPlayer.on("onChangeSubtitle", (text: string) => this.updateSubtitle(text))
+        trackPlayer.on("onChangeSubtitle", (cue: Cue) => this.updateCue(cue))
+        trackPlayer.on("onResetSubtitle", () => this.reset())
+        trackPlayer.on("onTrackLoaded", (track: Track) => this.updateTrack(track))
     }
     
-    public pauseAudio() {
+    pauseAudio() {
         this.trackPlayer.controlButton.textContent = 'Play';
     }
 
-    public playAudio() {
-        this.trackPlayer.controlButton.textContent = 'Pause';
+    playAudio() {
+        this.trackPlayer.controlButton.textContent = 'Pause';   
     }
 
-    public updateSubtitle(text: string) {
-        this.trackPlayer.subtitleElement.textContent = text;
+    updateCue(cue: Cue) {
+        if (this.currentCue && this.currentCue.identifier == cue.identifier) return;
+
+        this.currentCue = cue;
+        const durationInSeconds = cue.end - cue.start 
+        const textLength = this.currentCue.text.length;
+        const interval = (durationInSeconds * 1000) / textLength;
+        this.trackPlayer.typewriterElement.textContent = cue.text
     }
+
+    reset() {
+        this.currentCue = undefined;
+        this.trackPlayer.typewriterElement.textContent = ""
+        // Stop
+        // Delete
+    }
+    
+    updateTrack(track: Track) {
+        this.trackPlayer.trackNameElement.textContent = track.index + ": " + track.title;
+    }
+    
 }
 
 export default TrackPlayerView

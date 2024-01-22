@@ -2,9 +2,7 @@
 import App from './ts/App';
 import AudioPlayer from './ts/AudioPlayer';
 
-
-let app: App = new App()
-
 document.addEventListener('DOMContentLoaded', async () => {
+    let app: App = new App()
     await app.setUp() 
 });

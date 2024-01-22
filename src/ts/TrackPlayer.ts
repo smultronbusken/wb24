@@ -7,7 +7,9 @@ import SubtitleController, { Cue } from "./SubtitleController";
 type TrackPlayerEventName =
     "onPause" |
     "onChangeSubtitle" |
-    "onPlay";
+    "onPlay" |
+    "onTrackLoaded" |
+    "onResetSubtitle";
 
 class TrackPlayer {
 
@@ -15,8 +17,9 @@ class TrackPlayer {
     subtitleController: SubtitleController = new SubtitleController;
     backgroundController: BackgroundController = new BackgroundController;
 
-    public subtitleElement: HTMLElement;
+    public typewriterElement: HTMLElement;
     public controlButton: HTMLElement;
+    public trackNameElement: HTMLElement;
 
     private ee: EventEmitter = new EventEmitter;
 
@@ -26,10 +29,20 @@ class TrackPlayer {
 
     constructor() {
         this.controlButton = this.loadElement('audioControl');
-        this.subtitleElement = this.loadElement('subtitle');
+        this.typewriterElement = this.loadElement('typewriter');
+        this.trackNameElement = this.loadElement('currentTrackName');
         this.setUpAudioControls();
         this.setUpSubtitles();
 
+        this.loadElement('prevTrack').addEventListener('click', () => this.prevTrack());
+        this.loadElement('nextTrack').addEventListener('click', () => this.nextTrack());
+
+        const volumeSlider = this.loadElement('volumeSlider') as HTMLInputElement;
+        volumeSlider.addEventListener('input', () => {
+            const volume = parseFloat(volumeSlider.value);
+            this.audioPlayer.setVolume(volume);
+        });
+    
     }
 
     private loadElement(id: string): HTMLElement {
@@ -52,7 +65,7 @@ class TrackPlayer {
             const time = this.audioPlayer.getCurrentTime(); 
             const cue = this.subtitleController.getCue(time);
             if (cue)
-                this.updateSubtitle(cue.text);
+                this.updateCue(cue);
         }, 500); // Check every 500 milliseconds
     }
 
@@ -66,12 +79,11 @@ class TrackPlayer {
             listItem.addEventListener('click', () => {
                 this.currTrackIndex = index;
                 this.loadCurrentTrack();
-                this.updateSubtitle("")
+                this.resetSubtitle()
             });
             trackListElement.appendChild(listItem);
         });
     }
-
 
     public prepareTracks(...tracks: Track[]) {
         this.tracks = tracks;
@@ -81,17 +93,37 @@ class TrackPlayer {
     public async loadCurrentTrack() {
         const track = this.tracks[this.currTrackIndex];
         await this.loadTrack(track)
+        this.emit("onTrackLoaded", track)
+        this.resetSubtitle()
         this.play()
     }
 
+    public async prevTrack() {
+        if (this.currTrackIndex > 0) {
+            this.currTrackIndex--;
+        } else {
+            this.currTrackIndex = this.tracks.length - 1; // Loop back to the last track
+        }
+        await this.loadCurrentTrack();
+        this.play();
+    }
+
     public async nextTrack() {
-        this.currTrackIndex++;
-        await this.loadCurrentTrack()
-        this.play()
+        if (this.currTrackIndex < this.tracks.length - 1) {
+            this.currTrackIndex++;
+        } else {
+            this.currTrackIndex = 0; // Loop back to the first track
+        }
+        await this.loadCurrentTrack();
+        this.play();
     }
 
     public on(eventName: TrackPlayerEventName, listener: (...args: any[]) => void) {
         this.ee.on(eventName, listener)
+    }
+
+    private emit(eventName: TrackPlayerEventName, args?: any) {
+        this.ee.emit(eventName, args)
     }
 
     public async loadTrack(track: Track) {
@@ -112,18 +144,22 @@ class TrackPlayer {
 
     public async pauseAudio() {
         await this.audioPlayer.pause();
-        this.ee.emit("onPause")
+        this.emit("onPause")
     }
 
     public async playAudio() {
         await this.audioPlayer.playAudio();
-        this.ee.emit("onPlay")
+        this.emit("onPlay")
     }
 
-    public async updateSubtitle(content: string) {
-        this.ee.emit("onChangeSubtitle", content)
+    public async updateCue(cue: Cue) {
+
+        this.emit("onChangeSubtitle", cue)
     }
 
+    public async resetSubtitle() {
+        this.emit("onResetSubtitle")
+    }
 
 
 }

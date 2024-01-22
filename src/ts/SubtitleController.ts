@@ -16,6 +16,7 @@ export interface Cue {
     styles: string;
 }
 
+
 class SubtitleController {
 
     public currentSubtitle: Subtitle | undefined;
@@ -23,9 +24,10 @@ class SubtitleController {
     public async loadVTT(url: string) : Promise<Subtitle>{
         const response = await fetch(url);
         const text = await response.text();
-        console.log("Loaded " + text)
+        console.log(text)
         const parsed =  webvtt.parse(text)
         this.currentSubtitle = parsed;
+        console.log(parsed)
         return parsed
     }
 
