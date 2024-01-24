@@ -1,8 +1,7 @@
-import { Slider } from "./ui/slider"
+import { Slider } from './ui/slider';
 
-
-const TrackProgress = ({value, max, onTimeUpdate}) => {
-    const currValue = max && value ? value/max : 0
+const TrackProgress = ({ value, max, onTimeUpdate }) => {
+    const currValue = max && value ? value / max : 0;
     return (
         <div className="w-full max-w-screen-sm relative z-20 -top-2.5">
             <Slider
@@ -14,7 +13,7 @@ const TrackProgress = ({value, max, onTimeUpdate}) => {
                 onValueChange={onTimeUpdate}
             />
         </div>
-    )
-}
+    );
+};
 
-export default TrackProgress
+export default TrackProgress;

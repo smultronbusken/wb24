@@ -3,17 +3,23 @@ import AudioControls from './AudioControls';
 import { Track } from '../data/Tracks';
 import * as musicMetadata from 'music-metadata-browser';
 
-
 type AudioPlayerProps = {
     track: Track;
     shouldPlay: boolean;
     updateTimeCallback: any;
-    onEnd: any
-    onLoad: any
-    changedTime: number
+    onEnd: any;
+    onLoad: any;
+    changedTime: number;
 };
 
-export const AudioPlayer = ({ track, shouldPlay, updateTimeCallback, onEnd, onLoad, changedTime }: AudioPlayerProps) => {
+export const AudioPlayer = ({
+    track,
+    shouldPlay,
+    updateTimeCallback,
+    onEnd,
+    onLoad,
+    changedTime,
+}: AudioPlayerProps) => {
     const audioContext = useRef<AudioContext | null>();
     const audioBuffer = useRef<AudioBuffer | null>();
     const sourceNode = useRef<AudioBufferSourceNode | null>();
@@ -29,7 +35,7 @@ export const AudioPlayer = ({ track, shouldPlay, updateTimeCallback, onEnd, onLo
     const shouldDebug = false;
 
     useEffect(() => {
-        playAt(changedTime)
+        playAt(changedTime);
     }, [changedTime]);
 
     /* Needed? for timer */
@@ -86,23 +92,20 @@ export const AudioPlayer = ({ track, shouldPlay, updateTimeCallback, onEnd, onLo
     const loadAudio = async (url: string) => {
         if (!audioContext.current) return;
         reset();
-    
+
         // Fetch the audio file as an ArrayBuffer
         const response = await fetch(url);
         const arrayBuffer = await response.arrayBuffer();
-    
+
         // Metadata
         const uint8Array = new Uint8Array(arrayBuffer);
-        const mimeType = response.headers.get("content-type") || undefined;
+        const mimeType = response.headers.get('content-type') || undefined;
         try {
             const metadata = await musicMetadata.parseBuffer(uint8Array, { mimeType });
-            onLoad(metadata)
+            onLoad(metadata);
         } catch (error) {
             console.error('Error reading metadata:', error);
         }
-
-
-    
 
         audioBuffer.current = await audioContext.current.decodeAudioData(arrayBuffer);
     };
@@ -113,7 +116,7 @@ export const AudioPlayer = ({ track, shouldPlay, updateTimeCallback, onEnd, onLo
         sourceNode.current.buffer = audioBuffer.current;
         sourceNode.current.connect(gainNode.current).connect(audioContext.current.destination);
         sourceNode.current.connect(audioContext.current.destination);
-        sourceNode.current.onended = (_) => onEnd()
+        sourceNode.current.onended = _ => onEnd();
         if (paused) {
             debug('Resuming');
             setStartedAt(audioContext.current.currentTime - pausedAt);
@@ -126,17 +129,17 @@ export const AudioPlayer = ({ track, shouldPlay, updateTimeCallback, onEnd, onLo
         setPaused(false);
     };
 
-    const playAt = (time) => {
-        debug("Playing at " + time)
+    const playAt = time => {
+        debug('Playing at ' + time);
         if (!audioBuffer.current || !gainNode.current || !audioContext.current) return;
-        reset()
+        reset();
         sourceNode.current = audioContext.current.createBufferSource();
         sourceNode.current.buffer = audioBuffer.current;
         sourceNode.current.connect(gainNode.current).connect(audioContext.current.destination);
         sourceNode.current.connect(audioContext.current.destination);
-        sourceNode.current.onended = (_) => onEnd()
+        sourceNode.current.onended = _ => onEnd();
         sourceNode.current.start(0, time);
-            
+
         // Set startedAt to the current time minus the offset
         setStartedAt(audioContext.current.currentTime - time);
 
@@ -168,7 +171,7 @@ export const AudioPlayer = ({ track, shouldPlay, updateTimeCallback, onEnd, onLo
     };
 
     const handleVolumeChange = newVolume => {
-        console.log(newVolume)
+        console.log(newVolume);
         setCurrentVolume(newVolume);
         setIsMuted(false);
         if (gainNode.current) {

@@ -3,12 +3,20 @@ import { Card, CardContent } from './ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from './ui/carousel';
 import TrackCard from './TrackCard';
 
-const TrackList = ({tracks, trackIndex, onPressTrack}: {tracks: Track[], trackIndex: number, onPressTrack: (_) => {}}) => {
+const TrackList = ({
+    tracks,
+    trackIndex,
+    onPressTrack,
+}: {
+    tracks: Track[];
+    trackIndex: number;
+    onPressTrack: (_) => {};
+}) => {
     return (
         <Carousel
             opts={{
                 align: 'start',
-                startIndex: trackIndex
+                startIndex: trackIndex,
             }}
             className="w-full max-w-sm"
         >

@@ -39,7 +39,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const currentTrack = tracks[currTrackIndex];
 
     const updateTime = newTime => {
-        console.log(newTime)
+        console.log(newTime);
         setCurrentTime(newTime);
     };
 
@@ -55,42 +55,45 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
         setIsPlaying(!isPlaying);
     };
 
-    const changeTrack = (index) => {
-        if (index > tracks.length) throw new Error("track index out of range")
-        setCurrTrackIndex((index))
-        setIsPlaying(true)
-    }
+    const changeTrack = index => {
+        if (index > tracks.length) throw new Error('track index out of range');
+        setCurrTrackIndex(index);
+        setIsPlaying(true);
+    };
 
     const onEnd = () => {
-        console.log("Song ended?")
-    }
+        console.log('Song ended?');
+    };
 
-    const onLoad = (meta) => {
-        setCurrentTrackMeta(meta)
-    }
+    const onLoad = meta => {
+        setCurrentTrackMeta(meta);
+    };
 
-    const onTimeUpdate = (value) => {
-
-        let trackLength = currentTrackMeta?.format.duration
+    const onTimeUpdate = value => {
+        let trackLength = currentTrackMeta?.format.duration;
         if (!trackLength) return;
-            setChangedTime(trackLength*value)
-    }
+        setChangedTime(trackLength * value);
+    };
 
     return (
         <div className="flex flex-col justify-between w-full h-screen">
             <CanvasBackground track={currentTrack} />
-            
+
             <div className="flex flex-col items-center self-start w-full">
                 <div className="w-full p-2 bg-black bg-opacity-70 z-10 rectangle-full">
                     {/* Combined Track Display and Controls for small screens */}
                     <div className="flex items-center w-full md:hidden">
                         {/* Bar icon to the left */}
                         <div className="flex-initial">
-                            <TrackListDrawer tracks={tracks} currTrackIndex={currTrackIndex} onPressTrack={changeTrack} />
+                            <TrackListDrawer
+                                tracks={tracks}
+                                currTrackIndex={currTrackIndex}
+                                onPressTrack={changeTrack}
+                            />
                         </div>
                         {/* Center content with automatic margins */}
                         <div className="flex-grow flex-col flex justify-center items-center mx-auto">
-                            <TrackDisplay track={currentTrack} tracks={tracks} trackIndex={currTrackIndex}/>
+                            <TrackDisplay track={currentTrack} tracks={tracks} trackIndex={currTrackIndex} />
                             <TrackControls
                                 onNext={nextTrack}
                                 onPrev={prevTrack}
@@ -104,19 +107,18 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
                         </div>
                     </div>
 
-
                     {/* Grid layout for larger screens */}
                     <div className="hidden md:grid md:grid-cols-3 md:items-center w-full">
                         {/* Left Side Track Display */}
-                        
+
                         <div className="justify-self-start flex flex-row" style={{ height: '40px' }}>
-                            <TrackListDrawer tracks={tracks} currTrackIndex={currTrackIndex} onPressTrack={changeTrack} />
-                            <Separator
-                                decorative
-                                orientation="vertical"
-                                style={{ margin: '0 15px' }}
+                            <TrackListDrawer
+                                tracks={tracks}
+                                currTrackIndex={currTrackIndex}
+                                onPressTrack={changeTrack}
                             />
-                            <TrackDisplay track={currentTrack} tracks={tracks}  trackIndex={currTrackIndex} />
+                            <Separator decorative orientation="vertical" style={{ margin: '0 15px' }} />
+                            <TrackDisplay track={currentTrack} tracks={tracks} trackIndex={currTrackIndex} />
                         </div>
 
                         {/* Centered Track Controls */}
@@ -131,17 +133,24 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
 
                         {/* Right Side Placeholder */}
                         <div className="justify-self-end">
-                            <AudioPlayer track={currentTrack} shouldPlay={isPlaying} updateTimeCallback={updateTime} onEnd={onEnd} onLoad={onLoad} changedTime={changedTime}/>
+                            <AudioPlayer
+                                track={currentTrack}
+                                shouldPlay={isPlaying}
+                                updateTimeCallback={updateTime}
+                                onEnd={onEnd}
+                                onLoad={onLoad}
+                                changedTime={changedTime}
+                            />
                         </div>
                     </div>
                 </div>
-                
-                <TrackProgress value={currentTime} max={currentTrackMeta?.format.duration} onTimeUpdate={onTimeUpdate} />
+
+                <TrackProgress
+                    value={currentTime}
+                    max={currentTrackMeta?.format.duration}
+                    onTimeUpdate={onTimeUpdate}
+                />
             </div>
-
-
-
-
 
             <div className="w-full text-center mb-8 self-end z-10">
                 <Subtitle track={currentTrack} time={currentTime} />
