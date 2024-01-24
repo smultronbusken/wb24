@@ -68,7 +68,7 @@ export const CanvasBackground = ({ track }: CanvasBackgroundProps) => {
         );
     };
 
-    return <canvas id="backgroundCanvas" className="absolute w-full h-full"></canvas>;
+    return <canvas id="backgroundCanvas" className="absolute w-full h-full z-0"></canvas>;
 };
 
 export default CanvasBackground;

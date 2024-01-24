@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaBars, FaVolumeUp, FaVolumeDown, FaVolumeMute, FaVolumeOff } from 'react-icons/fa';
+import { Slider } from './ui/slider';
 
 const AudioControls = ({ onChangeVolume, onMute, currentVolume }) => {
     let VolumeIcon = FaVolumeUp;
@@ -7,7 +8,7 @@ const AudioControls = ({ onChangeVolume, onMute, currentVolume }) => {
     if (currentVolume <= -0.5) {
         VolumeIcon = FaVolumeDown;
     }
-    if (currentVolume === -1) {
+    if (currentVolume <= -1) {
         VolumeIcon = FaVolumeMute;
     }
 
@@ -17,14 +18,15 @@ const AudioControls = ({ onChangeVolume, onMute, currentVolume }) => {
                 <button className="btn btn-ghost" onClick={onMute}>
                     <VolumeIcon className="text-white text-lg" />
                 </button>
-                <input
-                    type="range"
-                    min="-1"
-                    max="-0.01"
-                    step="0.01"
-                    value={currentVolume}
-                    className="w-24"
-                    onChange={onChangeVolume} // Pass onChangeVolume to the input
+
+                <Slider
+                    className="w-24 h-4 rectangle-full"
+                    defaultValue={[currentVolume]}
+                    min={-1.01}
+                    max={0}
+                    step={0.01}
+                    value={[currentVolume]}
+                    onValueChange={onChangeVolume}
                 />
             </div>
         </div>

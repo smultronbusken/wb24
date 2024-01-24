@@ -22,6 +22,9 @@ import { FaBars } from 'react-icons/fa';
 import TrackList from './TrackList';
 import TrackListDrawer from './TrackListDrawer';
 import { Separator } from './ui/separator';
+import { IAudioMetadata } from 'music-metadata-browser';
+import ProgressBar from './Progressbar';
+import TrackProgress from './TrackProgress';
 
 type TrackPlayerInput = {
     tracks: Track[];
@@ -29,11 +32,14 @@ type TrackPlayerInput = {
 
 const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const [currTrackIndex, setCurrTrackIndex] = useState(0);
+    const [currentTrackMeta, setCurrentTrackMeta] = useState<IAudioMetadata>();
     const [isPlaying, setIsPlaying] = useState(false);
+    const [changedTime, setChangedTime] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const currentTrack = tracks[currTrackIndex];
 
     const updateTime = newTime => {
+        console.log(newTime)
         setCurrentTime(newTime);
     };
 
@@ -52,12 +58,30 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const changeTrack = (index) => {
         if (index > tracks.length) throw new Error("track index out of range")
         setCurrTrackIndex((index))
+        setIsPlaying(true)
+    }
+
+    const onEnd = () => {
+        console.log("Song ended?")
+    }
+
+    const onLoad = (meta) => {
+        setCurrentTrackMeta(meta)
+    }
+
+    const onTimeUpdate = (value) => {
+
+        let trackLength = currentTrackMeta?.format.duration
+        if (!trackLength) return;
+            setChangedTime(trackLength*value)
     }
 
     return (
-        <div className="relative w-full h-screen">
+        <div className="flex flex-col justify-between w-full h-screen">
             <CanvasBackground track={currentTrack} />
-                    <div className="absolute top-0 w-full p-2 bg-black bg-opacity-50">
+            
+            <div className="flex flex-col items-center self-start w-full">
+                <div className="w-full p-2 bg-black bg-opacity-70 z-10 rectangle-full">
                     {/* Combined Track Display and Controls for small screens */}
                     <div className="flex items-center w-full md:hidden">
                         {/* Bar icon to the left */}
@@ -75,7 +99,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
                             />
                         </div>
                         {/* Invisible icon or element to balance the grid, same size as drawer icon */}
-                        <div className="flex-initial invisible">
+                        <div className="flex-initial invisible mr-3">
                             <FaBars className="text-transparent" />
                         </div>
                     </div>
@@ -107,13 +131,19 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
 
                         {/* Right Side Placeholder */}
                         <div className="justify-self-end">
-                            <AudioPlayer track={currentTrack} shouldPlay={isPlaying} updateTimeCallback={updateTime} />
+                            <AudioPlayer track={currentTrack} shouldPlay={isPlaying} updateTimeCallback={updateTime} onEnd={onEnd} onLoad={onLoad} changedTime={changedTime}/>
                         </div>
                     </div>
                 </div>
-    
+                
+                <TrackProgress value={currentTime} max={currentTrackMeta?.format.duration} onTimeUpdate={onTimeUpdate} />
+            </div>
 
-            <div className="absolute bottom-0 w-full text-center mb-8">
+
+
+
+
+            <div className="w-full text-center mb-8 self-end z-10">
                 <Subtitle track={currentTrack} time={currentTime} />
             </div>
         </div>

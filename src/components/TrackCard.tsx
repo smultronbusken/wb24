@@ -1,11 +1,14 @@
 import { Card, CardContent } from "./ui/card"
 
-const TrackCard = ({track}) => {
+const TrackCard = ({track, isPlaying}) => {
     return (
         <Card>
-            <CardContent className="flex aspect-square items-center justify-center p-6">
-                <span className="text-3xl font-semibold">{track.title}</span>
+            {isPlaying ? "playing" : ""}
+            <CardContent className="flex aspect-square items-center justify-center p-6 ">
+                <span className="text-3xl font-bold">{track.title} </span>
             </CardContent>
         </Card>
     )
 }
+
+export default TrackCard

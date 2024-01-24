@@ -9,7 +9,7 @@ type SubtitleDisplayProps = {
 export const SubtitleDisplay = ({ cue }: SubtitleDisplayProps) => {
     return (
         <div>
-            <p className="text-4xl">{cue.text}</p>
+            <p className="text-4xl bg-white">{cue.text}</p>
         </div>
     );
 };
