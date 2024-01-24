@@ -20,7 +20,7 @@ module.exports = {
   rules: {
     "no-use-before-define": "error",
     "no-unused-vars": "error",
-    "indent": ["error", 2],
+    "indent": ["error", 4],
     "react/react-in-jsx-scope": "off",
   },
   settings: {

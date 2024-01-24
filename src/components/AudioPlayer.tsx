@@ -1,22 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import AudioControls from './AudioControls';
-import { Track } from '../data/tracks';
+import { Track } from '../data/Tracks';
 
 type AudioPlayerProps = {
     track: Track;
-    shouldPlay: Boolean;
+    shouldPlay: boolean;
     updateTimeCallback: any;
 };
 
 export const AudioPlayer = ({ track, shouldPlay, updateTimeCallback }: AudioPlayerProps) => {
-    let audioContext = useRef<AudioContext | null>();
-    let audioBuffer = useRef<AudioBuffer | null>();
-    let sourceNode = useRef<AudioBufferSourceNode | null>();
-    let gainNode = useRef<GainNode | null>();
+    const audioContext = useRef<AudioContext | null>();
+    const audioBuffer = useRef<AudioBuffer | null>();
+    const sourceNode = useRef<AudioBufferSourceNode | null>();
+    const gainNode = useRef<GainNode | null>();
 
     const [startedAt, setStartedAt] = useState(0);
     const [pausedAt, setPausedAt] = useState(0);
     const [paused, setPaused] = useState(false);
+    const [currentVolume, setCurrentVolume] = useState(-0.5);
+    const [volumeBeforeMute, setVolumeBeforeMute] = useState(currentVolume);
+    const [isMuted, setIsMuted] = useState(false);
 
     const shouldDebug = false;
 
@@ -59,7 +62,7 @@ export const AudioPlayer = ({ track, shouldPlay, updateTimeCallback }: AudioPlay
 
     const setUp = () => {
         audioContext.current = new AudioContext();
-        gainNode.current = new GainNode(audioContext.current, { gain: -0.5 });
+        gainNode.current = new GainNode(audioContext.current, { gain: currentVolume });
     };
 
     const loadAudio = async (url: string) => {
@@ -114,12 +117,33 @@ export const AudioPlayer = ({ track, shouldPlay, updateTimeCallback }: AudioPlay
 
     const handleVolumeChange = event => {
         const newVolume = parseFloat(event.target.value);
+        setCurrentVolume(newVolume);
+        setIsMuted(false);
+        if (gainNode.current) {
+            gainNode.current.gain.value = currentVolume;
+        }
+        console.log('hek');
+    };
+
+    const mute = () => {
+        let newVolume = -1;
+        if (isMuted) {
+            setIsMuted(false);
+            setCurrentVolume(volumeBeforeMute);
+            newVolume = volumeBeforeMute;
+        } else {
+            setVolumeBeforeMute(currentVolume);
+            setIsMuted(true);
+            setCurrentVolume(-1);
+            newVolume = -1;
+        }
+
         if (gainNode.current) {
             gainNode.current.gain.value = newVolume;
         }
     };
 
-    return <AudioControls onChangeVolume={handleVolumeChange} />;
+    return <AudioControls onChangeVolume={handleVolumeChange} currentVolume={currentVolume} onMute={mute} />;
 };
 
 export default AudioPlayer;

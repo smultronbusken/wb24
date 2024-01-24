@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Track } from "../data/tracks";
+import { Track } from '@/data/Tracks';
+import { useEffect, useRef } from 'react';
 
 type CanvasBackgroundProps = {
     track: Track;
@@ -9,15 +9,14 @@ export const CanvasBackground = ({ track }: CanvasBackgroundProps) => {
     const backgroundImage = useRef(new Image()); // Use a ref for the image
 
     useEffect(() => {
-        
         const canvasElement = document.getElementById('backgroundCanvas') as HTMLCanvasElement;
         if (!canvasElement) {
-            throw new Error("Cannot find canvas element");
+            throw new Error('Cannot find canvas element');
         }
 
         const context = canvasElement.getContext('2d');
         if (!context) {
-            throw new Error("Failed to get canvas context");
+            throw new Error('Failed to get canvas context');
         }
 
         const resizeCanvas = () => {
@@ -54,15 +53,22 @@ export const CanvasBackground = ({ track }: CanvasBackgroundProps) => {
     const drawBackground = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
         if (!backgroundImage.current) return;
 
-        const scale = Math.max(canvas.width / backgroundImage.current.width, canvas.height / backgroundImage.current.height);
+        const scale = Math.max(
+            canvas.width / backgroundImage.current.width,
+            canvas.height / backgroundImage.current.height
+        );
         const x = (canvas.width - backgroundImage.current.width * scale) / 2;
         const y = (canvas.height - backgroundImage.current.height * scale) / 2;
-        ctx.drawImage(backgroundImage.current, x, y, backgroundImage.current.width * scale, backgroundImage.current.height * scale);
+        ctx.drawImage(
+            backgroundImage.current,
+            x,
+            y,
+            backgroundImage.current.width * scale,
+            backgroundImage.current.height * scale
+        );
     };
 
-    return (
-        <canvas id="backgroundCanvas" className="absolute w-full h-full"></canvas>
-    );
+    return <canvas id="backgroundCanvas" className="absolute w-full h-full"></canvas>;
 };
 
 export default CanvasBackground;

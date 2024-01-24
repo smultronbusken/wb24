@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import webvtt from 'node-webvtt';
 import SubtitleDisplay from './SubtitleDisplay';
+import { Track } from '@/data/Tracks';
 
 export interface ISubtitle {
     valid: boolean;
@@ -48,12 +49,12 @@ export const Subtitle = ({ track, time }: SubtitleProps) => {
     };
 
     useEffect(() => {
-        setCurrentCue(getCue(time))
+        setCurrentCue(getCue(time));
     }, [time]);
 
     const getCue = (time: number) => {
         const cue = currentSubtitle.cues.find(cue => time >= cue.start && time <= cue.end);
-        return cue ? cue : EmptyCue
+        return cue ? cue : EmptyCue;
     };
 
     return (

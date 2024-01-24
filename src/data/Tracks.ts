@@ -4,8 +4,8 @@ export interface Track {
     backgroundURL: string;
     VTTURL: string;
     index: number;
+    act: string;
 }
-
 
 export const _tracks: Track[] = [
     {
@@ -15,6 +15,7 @@ export const _tracks: Track[] = [
         VTTURL: '/wb1.vtt',
         title: 'The Great Speech of Stockholm Port',
         index: 1,
+        act: '1',
     },
     {
         audioURL:
@@ -24,6 +25,7 @@ export const _tracks: Track[] = [
         VTTURL: '/wb2.vtt',
         title: 'Captain of the Sky!',
         index: 2,
+        act: '1',
     },
     {
         audioURL: 'https://weeklybeats.s3.amazonaws.com/music/2024/nozzlan_weeklybeats-2024_2_jack-black.mp3',
@@ -32,5 +34,6 @@ export const _tracks: Track[] = [
         VTTURL: '/wb2.vtt',
         title: 'jackblack',
         index: 3,
+        act: '????',
     },
 ];
