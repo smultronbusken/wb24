@@ -8,7 +8,7 @@ import Inject from '@rollup/plugin-inject'
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react(), 
-      NodeModulesPolyfillPlugin(
+      /*NodeModulesPolyfillPlugin(
         {
           name: "Buffer"
         }
@@ -17,15 +17,17 @@ export default defineConfig({
         modules: {
           Buffer: ['buffer', 'Buffer']
         },
-      })
+      })*/
     ],
     base: '/wb24/',
     resolve: {
         alias: {
           "@": path.resolve(__dirname, "./src"),
+          'Buffer': 'rollup-plugin-node-polyfills/polyfills/Buffer',
         },
+        
     },
-    optimizeDeps: {
+   optimizeDeps: {
       esbuildOptions: {
         define: {
           global: 'globalThis',
@@ -37,7 +39,8 @@ export default defineConfig({
         ],
       },
     },
+    /*
     build: {
       commonjsOptions: { transformMixedEsModules: true } // Change
-    }
+    }*/
 });
