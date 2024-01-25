@@ -3,6 +3,8 @@ import AudioControls from './AudioControls';
 import { Track } from '../data/Tracks';
 import * as musicMetadata from 'music-metadata-browser';
 import React from 'react';
+
+
 type AudioPlayerProps = {
     track: Track;
     shouldPlay: boolean;
@@ -47,6 +49,7 @@ export const AudioPlayer = ({
     useEffect(() => {
         pausedRef.current = paused;
     }, [paused]);
+    
     useEffect(() => {
         const interval = setInterval(() => {
             if (audioContext.current && !pausedRef.current) {
@@ -131,19 +134,23 @@ export const AudioPlayer = ({
 
     const playAt = time => {
         debug('Playing at ' + time);
-        if (!audioBuffer.current || !gainNode.current || !audioContext.current) return;
-        reset();
-        sourceNode.current = audioContext.current.createBufferSource();
-        sourceNode.current.buffer = audioBuffer.current;
-        sourceNode.current.connect(gainNode.current).connect(audioContext.current.destination);
-        sourceNode.current.connect(audioContext.current.destination);
-        sourceNode.current.onended = _ => onEnd();
-        sourceNode.current.start(0, time);
-
-        // Set startedAt to the current time minus the offset
-        setStartedAt(audioContext.current.currentTime - time);
-
-        setPaused(false);
+        if (!paused) {
+            if (!audioBuffer.current || !gainNode.current || !audioContext.current) return;
+            reset();
+            sourceNode.current = audioContext.current.createBufferSource();
+            sourceNode.current.buffer = audioBuffer.current;
+            sourceNode.current.connect(gainNode.current).connect(audioContext.current.destination);
+            sourceNode.current.connect(audioContext.current.destination);
+            sourceNode.current.onended = _ => onEnd();
+            sourceNode.current.start(0, time);
+            setStartedAt(audioContext.current.currentTime - time);
+            setPaused(false);
+        } else {    
+            if (!audioContext.current) return;
+            setPausedAt(time)
+            updateTimeCallback(time);
+            setStartedAt(audioContext.current.currentTime - time);
+        }
     };
 
     const pause = () => {

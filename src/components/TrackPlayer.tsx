@@ -79,7 +79,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
             <CanvasBackground track={currentTrack} />
 
             <div className="flex flex-col items-center self-start w-full">
-                <div className="w-full p-2 bg-black bg-opacity-70 z-10 rectangle-full">
+                <div className="w-full p-4 bg-black bg-opacity-70 z-10 rectangle-full">
                     {/* Combined Track Display and Controls for small screens */}
                     <div className="flex items-center w-full md:hidden">
                         {/* Bar icon to the left */}
@@ -143,12 +143,14 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
                         </div>
                     </div>
                 </div>
+                {
+                    currentTrackMeta ? <TrackProgress
+                            value={currentTime}
+                            max={currentTrackMeta?.format.duration}
+                            onTimeUpdate={onTimeUpdate}
+                        /> : <div />
+                }
 
-                <TrackProgress
-                    value={currentTime}
-                    max={currentTrackMeta?.format.duration}
-                    onTimeUpdate={onTimeUpdate}
-                />
             </div>
 
             <div className="w-full text-center mb-8 self-end z-10">
