@@ -18,7 +18,7 @@ const TrackList = ({
                 align: 'start',
                 startIndex: trackIndex,
             }}
-            className="w-full max-w-sm"
+            className="w-full  lg:max-w-lg md:max-w-md max-w-52"
         >
             <CarouselContent>
                 {tracks.map((t, index) => (
