@@ -2,7 +2,7 @@ import { FaBars } from 'react-icons/fa';
 
 import TrackList from './TrackList';
 import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer';
-
+import React from 'react';
 const TrackListDrawer = ({ tracks, currTrackIndex, onPressTrack }) => {
     return (
         <Drawer>

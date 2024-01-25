@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import TrackPlayer from '../components/TrackPlayer';
-
+import React from 'react';
 import * as mm from 'music-metadata';
 import { Track, _tracks } from '../data/Tracks';
 import TrackPlayerToggle from '@/components/BarToggle';

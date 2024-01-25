@@ -13,7 +13,7 @@ import {
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from './ui/carousel';
 import { Card, CardContent } from './ui/card';
 import TrackList from './TrackList';
-
+import React from 'react';
 const TrackDisplay = ({ tracks, track, trackIndex }) => {
     return (
         <div className="flex flex-col justify-center ">

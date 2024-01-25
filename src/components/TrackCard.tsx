@@ -1,5 +1,5 @@
 import { Card, CardContent } from './ui/card';
-
+import React from 'react';
 const TrackCard = ({ track, isPlaying }) => {
     return (
         <Card>

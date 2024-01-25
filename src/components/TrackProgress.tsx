@@ -1,5 +1,5 @@
 import { Slider } from './ui/slider';
-
+import React from 'react';
 const TrackProgress = ({ value, max, onTimeUpdate }) => {
     const currValue = max && value ? value / max : 0;
     return (

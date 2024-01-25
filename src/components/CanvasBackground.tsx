@@ -1,6 +1,6 @@
 import { Track } from '@/data/Tracks';
 import { useEffect, useRef } from 'react';
-
+import React from 'react';
 type CanvasBackgroundProps = {
     track: Track;
 };

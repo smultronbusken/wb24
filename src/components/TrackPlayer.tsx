@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import TrackControls from './TrackControls';
-
+import React from 'react';
 import Subtitle from './Subtitle';
 import AudioPlayer from './AudioPlayer';
 import CanvasBackground from './CanvasBackground';
