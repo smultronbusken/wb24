@@ -25,6 +25,7 @@ import { Separator } from './ui/separator';
 import { IAudioMetadata } from 'music-metadata-browser';
 import ProgressBar from './Progressbar';
 import TrackProgress from './TrackProgress';
+import { LoadingSpinner } from './LoadingSpinner';
 
 type TrackPlayerInput = {
     tracks: Track[];
@@ -42,9 +43,10 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const currentTrack = tracks[currTrackIndex];
 
     const updateTime = newTime => {
+
         setCurrentTime(newTime);
         if (currentTrackMeta?.format.duration) {
-            if (currentTrackMeta?.format.duration - newTime < 0.01)
+            if (currentTrackMeta?.format.duration - newTime < 0.2)
                 nextTrack()
         }
     };
@@ -96,10 +98,19 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
         setChangedTime(trackLength * value);
     };
 
+    const shouldDisableSubtitles = isLoadingTrack;
+
     return (
         <div className="flex flex-col justify-between w-full h-screen">
             <CanvasBackground track={currentTrack} />
-
+            <div className='absolute w-full h-full flex items-center align-center justify-center'>
+                {
+                    isLoadingTrack ? 
+                        <LoadingSpinner className="h-1/6 w-6/12 animate-spin z-0" />
+                        :
+                        ""
+                }
+            </div>
             <div className="flex flex-col items-center self-start w-full">
                 <div className="w-full p-4 bg-black bg-opacity-70 z-10 rectangle-full">
                     {/* Combined Track Display and Controls for small screens */}
@@ -121,6 +132,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
                                 onTogglePlay={togglePlayPause}
                                 isPlaying={isPlaying}
                             />
+                                        
                         </div>
                         {/* Invisible icon or element to balance the grid, same size as drawer icon */}
                         <div className="flex-initial invisible mr-3">
@@ -179,11 +191,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
             </div>
 
             <div className="w-full text-center mb-8 self-end z-10">
-                <Subtitle track={currentTrack} time={currentTime} />
-                <h1 className='text-white'>
-
-                { isLoadingTrack ? "loading" : "LOADED"}
-                </h1>
+                <Subtitle track={currentTrack} time={currentTime} disable={shouldDisableSubtitles} />
             </div>
         </div>
     );

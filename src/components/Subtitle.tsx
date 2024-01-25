@@ -31,9 +31,10 @@ export const EmptySubtitle: ISubtitle = {
 type SubtitleProps = {
     track: Track;
     time: number;
+    disable: boolean
 };
 
-export const Subtitle = ({ track, time }: SubtitleProps) => {
+export const Subtitle = ({ track, time, disable }: SubtitleProps) => {
     const [currentSubtitle, setCurrentSubtitle] = useState<ISubtitle>(EmptySubtitle);
     const [currentCue, setCurrentCue] = useState<Cue>(EmptyCue);
 
@@ -53,6 +54,7 @@ export const Subtitle = ({ track, time }: SubtitleProps) => {
     }, [time]);
 
     const getCue = (time: number) => {
+        if (disable) return EmptyCue
         const cue = currentSubtitle.cues.find(cue => time >= cue.start && time <= cue.end);
         return cue ? cue : EmptyCue;
     };
