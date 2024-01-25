@@ -5,7 +5,7 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
-    base: '/wb24/',
+ 
     resolve: {
         alias: {
           "@": path.resolve(__dirname, "./src"),
