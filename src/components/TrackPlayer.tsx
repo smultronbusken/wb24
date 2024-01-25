@@ -40,6 +40,10 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
 
     const updateTime = newTime => {
         setCurrentTime(newTime);
+        if (currentTrackMeta?.format.duration) {
+            if (currentTrackMeta?.format.duration - newTime < 0.01)
+                nextTrack()
+        }
     };
 
     const nextTrack = () => {
@@ -61,7 +65,10 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     };
 
     const onEnd = () => {
-        //console.log('Song ended?');
+        console.log("Stopping at: " + currentTime)
+        if (!currentTrackMeta || !currentTrackMeta?.format.duration) return 
+        if (currentTrackMeta?.format.duration - currentTime < 0.01)
+            console.log("change!!");
     };
 
     const onLoad = meta => {

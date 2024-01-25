@@ -56,7 +56,7 @@ export const AudioPlayer = ({
                 const currentTime = audioContext.current.currentTime - startedAtRef.current;
                 updateTimeCallback(currentTime);
             }
-        }, 100);
+        }, 10);
 
         return () => clearInterval(interval);
     }, []); // Empty dependency array to run only once
@@ -113,13 +113,22 @@ export const AudioPlayer = ({
         audioBuffer.current = await audioContext.current.decodeAudioData(arrayBuffer);
     };
 
+    const onSourceNodeEnded = () => {
+        if (audioContext.current) {
+            const currentTime = audioContext.current.currentTime - startedAtRef.current;
+            updateTimeCallback(currentTime);
+            console.log(currentTime)
+            //onEnd()
+        }
+    }
+
     const play = () => {
         if (!audioBuffer.current || !gainNode.current || !audioContext.current) return;
         sourceNode.current = audioContext.current.createBufferSource();
         sourceNode.current.buffer = audioBuffer.current;
         sourceNode.current.connect(gainNode.current).connect(audioContext.current.destination);
         sourceNode.current.connect(audioContext.current.destination);
-        sourceNode.current.onended = _ => onEnd();
+        sourceNode.current.onended = _ => onSourceNodeEnded();
         if (paused) {
             debug('Resuming');
             setStartedAt(audioContext.current.currentTime - pausedAt);
@@ -141,7 +150,7 @@ export const AudioPlayer = ({
             sourceNode.current.buffer = audioBuffer.current;
             sourceNode.current.connect(gainNode.current).connect(audioContext.current.destination);
             sourceNode.current.connect(audioContext.current.destination);
-            sourceNode.current.onended = _ => onEnd();
+            sourceNode.current.onended = _ => onSourceNodeEnded();
             sourceNode.current.start(0, time);
             setStartedAt(audioContext.current.currentTime - time);
             setPaused(false);
@@ -156,17 +165,17 @@ export const AudioPlayer = ({
     const pause = () => {
         if (!audioContext.current) return;
         debug('Pausing');
+        sourceNode.current?.stop(0);
         setPausedAt(audioContext.current.currentTime - startedAt);
         setPaused(true);
-        sourceNode.current?.stop(0);
     };
 
     const reset = () => {
         if (!audioContext.current) return;
         debug('Resetting');
+        sourceNode.current?.stop(0);
         setPausedAt(0);
         setPaused(true);
-        sourceNode.current?.stop(0);
     };
 
     const debug = (action: string) => {
