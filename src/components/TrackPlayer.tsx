@@ -39,7 +39,6 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const currentTrack = tracks[currTrackIndex];
 
     const updateTime = newTime => {
-        console.log(newTime);
         setCurrentTime(newTime);
     };
 
@@ -62,7 +61,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     };
 
     const onEnd = () => {
-        console.log('Song ended?');
+        //console.log('Song ended?');
     };
 
     const onLoad = meta => {
