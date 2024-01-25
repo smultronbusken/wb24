@@ -22,7 +22,7 @@ const AudioControls = ({ onChangeVolume, onMute, currentVolume }) => {
                 <Slider
                     className="w-24 h-4 rectangle-full"
                     defaultValue={[currentVolume]}
-                    min={-1.01}
+                    min={-1}
                     max={0}
                     step={0.01}
                     value={[currentVolume]}

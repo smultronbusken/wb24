@@ -191,7 +191,7 @@ export const AudioPlayer = ({
         setCurrentVolume(newVolume);
         setIsMuted(false);
         if (gainNode.current) {
-            gainNode.current.gain.value = currentVolume;
+            gainNode.current.gain.value = newVolume;
         }
     };
 
