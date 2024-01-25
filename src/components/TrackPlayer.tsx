@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TrackControls from './TrackControls';
 import React from 'react';
 import Subtitle from './Subtitle';
@@ -36,6 +36,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [changedTime, setChangedTime] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
+    const [changedTrackTrigger, setChangedTrackTrigger] = useState(false);
     const currentTrack = tracks[currTrackIndex];
 
     const updateTime = newTime => {
@@ -52,6 +53,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
 
     const prevTrack = () => {
         setCurrTrackIndex(prevIndex => (prevIndex - 1 + tracks.length) % tracks.length);
+
     };
 
     const togglePlayPause = async () => {
@@ -61,8 +63,18 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const changeTrack = index => {
         if (index > tracks.length) throw new Error('track index out of range');
         setCurrTrackIndex(index);
-        setIsPlaying(true);
+        //setIsPlaying(true);
+        console.log("LOOL")
+        setChangedTrackTrigger(!changedTrackTrigger)
     };
+
+    useEffect(() => {
+    
+        console.log("Changed!")
+        setIsPlaying(true);
+    }, [changedTrackTrigger]);
+
+
 
     const onEnd = () => {
         console.log("Stopping at: " + currentTime)
@@ -146,6 +158,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
                                 onEnd={onEnd}
                                 onLoad={onLoad}
                                 changedTime={changedTime}
+                                changedTrackTrigger={changedTrackTrigger}
                             />
                         </div>
                     </div>

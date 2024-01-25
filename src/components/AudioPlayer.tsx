@@ -12,6 +12,7 @@ type AudioPlayerProps = {
     onEnd: any;
     onLoad: any;
     changedTime: number;
+    changedTrackTrigger: boolean
 };
 
 export const AudioPlayer = ({
@@ -21,6 +22,7 @@ export const AudioPlayer = ({
     onEnd,
     onLoad,
     changedTime,
+    changedTrackTrigger
 }: AudioPlayerProps) => {
     const audioContext = useRef<AudioContext | null>();
     const audioBuffer = useRef<AudioBuffer | null>();
@@ -39,6 +41,8 @@ export const AudioPlayer = ({
     useEffect(() => {
         playAt(changedTime);
     }, [changedTime]);
+
+ 
 
     /* Needed? for timer */
     const startedAtRef = useRef(startedAt);
@@ -82,10 +86,13 @@ export const AudioPlayer = ({
     }, [track]);
 
     const onChangeTrack = async () => {
+        console.log("on change track")
         updateTimeCallback(0);
         await loadAudio(track.audioURL);
         if (shouldPlay) play();
     };
+
+
 
     const setUp = () => {
         audioContext.current = new AudioContext();
