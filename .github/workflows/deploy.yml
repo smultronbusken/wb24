@@ -39,6 +39,8 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+        env:
+          VITE_REACT_APP_TRACK_LIST_URL: ${{ secrets.TRACK_LIST_URL }}
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact

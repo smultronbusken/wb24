@@ -1,8 +1,8 @@
-import { Track } from '@/data/Tracks';
 import { Card, CardContent } from './ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from './ui/carousel';
 import TrackCard from './TrackCard';
 import React from 'react';
+import { Track } from '@/data/Tracks';
 const TrackList = ({
     tracks,
     trackIndex,

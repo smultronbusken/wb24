@@ -16,7 +16,7 @@ export default defineConfig({
     build: {
       commonjsOptions: { transformMixedEsModules: true }, // Change
       rollupOptions: {
-        plugins: [Inject({ Buffer: ['buffer', 'Buffer'] })],
+        plugins: [Inject({ Buffer: ['buffer', 'Buffer'],  })],
     },
     },
     optimizeDeps: {
@@ -26,6 +26,7 @@ export default defineConfig({
         },
         plugins: [
           NodeGlobalsPolyfillPlugin({
+            process: true,
             buffer: true,
           }),
         ],

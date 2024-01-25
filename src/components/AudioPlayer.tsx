@@ -65,7 +65,6 @@ export const AudioPlayer = ({
             if (audioContext.current && !pausedRef.current) {
                 const currentTime = audioContext.current.currentTime - startedAtRef.current;
                 updateTimeCallback(currentTime);
-                console.log(currentTime)
             }
         }, 10);
 

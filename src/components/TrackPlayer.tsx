@@ -4,7 +4,6 @@ import React from 'react';
 import Subtitle from './Subtitle';
 import AudioPlayer from './AudioPlayer';
 import CanvasBackground from './CanvasBackground';
-import { Track } from '../data/Tracks';
 import TrackDisplay from './TrackDisplay';
 import BarToggle from './BarToggle';
 import {
@@ -26,6 +25,7 @@ import { IAudioMetadata } from 'music-metadata-browser';
 import ProgressBar from './Progressbar';
 import TrackProgress from './TrackProgress';
 import { LoadingSpinner } from './LoadingSpinner';
+import { Track } from '@/data/Tracks';
 
 type TrackPlayerInput = {
     tracks: Track[];
