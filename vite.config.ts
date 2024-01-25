@@ -3,10 +3,22 @@ import path from "path"
 import react from '@vitejs/plugin-react';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
+import Inject from '@rollup/plugin-inject'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [react(), NodeModulesPolyfillPlugin(),],
+    plugins: [react(), 
+      NodeModulesPolyfillPlugin(
+        {
+          name: "Buffer"
+        }
+      ),
+      Inject( {
+        modules: {
+          Buffer: ['buffer', 'Buffer']
+        },
+      })
+    ],
     base: '/wb24/',
     resolve: {
         alias: {
