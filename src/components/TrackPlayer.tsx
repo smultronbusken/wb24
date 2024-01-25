@@ -37,6 +37,8 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const [changedTime, setChangedTime] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [changedTrackTrigger, setChangedTrackTrigger] = useState(false);
+    const [isLoadingTrack, setIsLoadingTrack] = useState(false);
+    const [firstLoad, setFirstLoad] = useState(true);
     const currentTrack = tracks[currTrackIndex];
 
     const updateTime = newTime => {
@@ -53,7 +55,6 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
 
     const prevTrack = () => {
         setCurrTrackIndex(prevIndex => (prevIndex - 1 + tracks.length) % tracks.length);
-
     };
 
     const togglePlayPause = async () => {
@@ -62,12 +63,17 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
 
     const changeTrack = index => {
         if (index > tracks.length) throw new Error('track index out of range');
+
         setCurrTrackIndex(index);
         setChangedTrackTrigger(!changedTrackTrigger)
     };
 
     useEffect(() => {
-
+        if (firstLoad) {
+            // Do not load on when the user lands the first time on the webpage
+            setFirstLoad(false)
+            return;
+        }
         setIsPlaying(true);
     }, [changedTrackTrigger]);
 
@@ -156,6 +162,8 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
                                 onLoad={onLoad}
                                 changedTime={changedTime}
                                 changedTrackTrigger={changedTrackTrigger}
+                                setIsLoadingTrack={setIsLoadingTrack}
+                                isLoadingTrack={isLoadingTrack}
                             />
                         </div>
                     </div>
@@ -172,6 +180,10 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
 
             <div className="w-full text-center mb-8 self-end z-10">
                 <Subtitle track={currentTrack} time={currentTime} />
+                <h1 className='text-white'>
+
+                { isLoadingTrack ? "loading" : "LOADED"}
+                </h1>
             </div>
         </div>
     );

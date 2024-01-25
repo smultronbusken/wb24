@@ -12,7 +12,9 @@ type AudioPlayerProps = {
     onEnd: any;
     onLoad: any;
     changedTime: number;
-    changedTrackTrigger: boolean
+    changedTrackTrigger: boolean,
+    setIsLoadingTrack: any
+    isLoadingTrack: boolean
 };
 
 export const AudioPlayer = ({
@@ -22,7 +24,9 @@ export const AudioPlayer = ({
     onEnd,
     onLoad,
     changedTime,
-    changedTrackTrigger
+    changedTrackTrigger,
+    setIsLoadingTrack,
+    isLoadingTrack
 }: AudioPlayerProps) => {
     const audioContext = useRef<AudioContext | null>();
     const audioBuffer = useRef<AudioBuffer | null>();
@@ -35,6 +39,8 @@ export const AudioPlayer = ({
     const [currentVolume, setCurrentVolume] = useState(-0.5);
     const [volumeBeforeMute, setVolumeBeforeMute] = useState(currentVolume);
     const [isMuted, setIsMuted] = useState(false);
+    const cancellationToken = useRef(0);
+    const loading = useRef(false);
 
     const shouldDebug = false;
 
@@ -72,7 +78,7 @@ export const AudioPlayer = ({
         if (shouldPlay) {
             if (!audioContext.current) {
                 // First time the user starts audio
-                setUp();
+                setUp();      
                 await loadAudio(track.audioURL);
             }
             play();
@@ -87,24 +93,37 @@ export const AudioPlayer = ({
 
     const onChangeTrack = async () => {
         updateTimeCallback(0);
+
         await loadAudio(track.audioURL);
         if (shouldPlay) play();
     };
-
-
 
     const setUp = () => {
         audioContext.current = new AudioContext();
         gainNode.current = new GainNode(audioContext.current, { gain: currentVolume });
     };
 
+    const shouldCancelLoad = (token) => () => cancellationToken.current !== token
+
     const loadAudio = async (url: string) => {
         if (!audioContext.current) return;
+
+        cancellationToken.current++;
+        let token = cancellationToken.current
+        let shouldCancelLoadFn = shouldCancelLoad(token)
+
+        setIsLoadingTrack(true)
         reset();
 
         // Fetch the audio file as an ArrayBuffer
         const response = await fetch(url);
+
         const arrayBuffer = await response.arrayBuffer();
+
+        if (shouldCancelLoadFn()) {
+            audioBuffer.current = null
+            return;
+        }
 
         // Metadata
         const uint8Array = new Uint8Array(arrayBuffer);
@@ -116,9 +135,20 @@ export const AudioPlayer = ({
             console.error('Error reading metadata:', error);
         }
 
-        audioBuffer.current = await audioContext.current.decodeAudioData(arrayBuffer);
-    };
+        if (shouldCancelLoadFn()) {
+            audioBuffer.current = null
+            return;
+        }
 
+        audioBuffer.current = await audioContext.current.decodeAudioData(arrayBuffer);
+
+        if (shouldCancelLoadFn()) {
+            audioBuffer.current = null
+            return;
+        }
+        setIsLoadingTrack(false)
+    };
+    
     const onSourceNodeEnded = () => {
         if (audioContext.current) {
             const currentTime = audioContext.current.currentTime - startedAtRef.current;
@@ -177,7 +207,9 @@ export const AudioPlayer = ({
     const reset = () => {
         if (!audioContext.current) return;
         debug('Resetting');
+        sourceNode.current?.disconnect();
         sourceNode.current?.stop(0);
+        sourceNode.current = null;
         setPausedAt(0);
         setPaused(true);
     };
@@ -191,7 +223,6 @@ export const AudioPlayer = ({
     };
 
     const handleVolumeChange = newVolume => {
-        console.log(newVolume);
         setCurrentVolume(newVolume);
         setIsMuted(false);
         if (gainNode.current) {
