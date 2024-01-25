@@ -63,21 +63,18 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const changeTrack = index => {
         if (index > tracks.length) throw new Error('track index out of range');
         setCurrTrackIndex(index);
-        //setIsPlaying(true);
-        console.log("LOOL")
         setChangedTrackTrigger(!changedTrackTrigger)
     };
 
     useEffect(() => {
-    
-        console.log("Changed!")
+
         setIsPlaying(true);
     }, [changedTrackTrigger]);
 
 
-
+    // Should remove?
     const onEnd = () => {
-        console.log("Stopping at: " + currentTime)
+        
         if (!currentTrackMeta || !currentTrackMeta?.format.duration) return 
         if (currentTrackMeta?.format.duration - currentTime < 0.01)
             console.log("change!!");

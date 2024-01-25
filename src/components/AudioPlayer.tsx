@@ -86,7 +86,6 @@ export const AudioPlayer = ({
     }, [track]);
 
     const onChangeTrack = async () => {
-        console.log("on change track")
         updateTimeCallback(0);
         await loadAudio(track.audioURL);
         if (shouldPlay) play();
@@ -124,8 +123,6 @@ export const AudioPlayer = ({
         if (audioContext.current) {
             const currentTime = audioContext.current.currentTime - startedAtRef.current;
             updateTimeCallback(currentTime);
-            console.log(currentTime)
-            //onEnd()
         }
     }
 
