@@ -12,7 +12,7 @@ type AudioPlayerProps = {
     onEnd: any;
     onLoad: any;
     changedTime: number;
-    changedTrackTrigger: boolean,
+    onRestart: boolean,
     setIsLoadingTrack: any
     isLoadingTrack: boolean
 };
@@ -24,7 +24,7 @@ export const AudioPlayer = ({
     onEnd,
     onLoad,
     changedTime,
-    changedTrackTrigger,
+    onRestart,
     setIsLoadingTrack,
     isLoadingTrack
 }: AudioPlayerProps) => {
@@ -89,7 +89,7 @@ export const AudioPlayer = ({
 
     useEffect(() => {
         onChangeTrack();
-    }, [track]);
+    }, [track, onRestart]);
 
     const onChangeTrack = async () => {
         updateTimeCallback(0);

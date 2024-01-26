@@ -43,7 +43,7 @@ export const Subtitle = ({ track, time, disable }: SubtitleProps) => {
     }, [track]);
 
     const loadVTT = async (track: Track) => {
-        const response = await fetch(import.meta.env.BASE_URL + track.VTTURL);
+        const response = await fetch(import.meta.env.BASE_URL + "subtitles/" +  track.VTTURL);
         const text = await response.text();
         try {
             const parsed = webvtt.parse(text);

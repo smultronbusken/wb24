@@ -25,3 +25,5 @@ yarn-error.log*
 /dist
 .env
 dist/index.html
+
+public/subtitles

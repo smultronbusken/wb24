@@ -38,6 +38,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     const [changedTime, setChangedTime] = useState(0);
     const [currentTime, setCurrentTime] = useState(0);
     const [changedTrackTrigger, setChangedTrackTrigger] = useState(false);
+    const [onRestartTrigger, setOnRestartTrigger] = useState(false);
     const [isLoadingTrack, setIsLoadingTrack] = useState(false);
     const [firstLoad, setFirstLoad] = useState(true);
     const currentTrack = tracks[currTrackIndex];
@@ -56,7 +57,12 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
     };
 
     const prevTrack = () => {
-        setCurrTrackIndex(prevIndex => (prevIndex - 1 + tracks.length) % tracks.length);
+        if (currentTime > 1) {
+            setOnRestartTrigger(!onRestartTrigger)
+            console.log("hejj")
+        } else {
+            setCurrTrackIndex(prevIndex => (prevIndex - 1 + tracks.length) % tracks.length);
+        }
     };
 
     const togglePlayPause = async () => {
@@ -173,7 +179,7 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
                                 onEnd={onEnd}
                                 onLoad={onLoad}
                                 changedTime={changedTime}
-                                changedTrackTrigger={changedTrackTrigger}
+                                onRestart={onRestartTrigger}
                                 setIsLoadingTrack={setIsLoadingTrack}
                                 isLoadingTrack={isLoadingTrack}
                             />
