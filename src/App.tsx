@@ -4,9 +4,10 @@ import React from 'react';
 
 const App: React.FC = () => {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename="/wb24">
             <Routes>
-                <Route path="*" element={<MainPage />} />
+                <Route path="/" element={<MainPage />} />
+                <Route path="/:trackID" element={<MainPage />} />
             </Routes>
         </BrowserRouter>
     );

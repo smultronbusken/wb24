@@ -29,9 +29,10 @@ import { Track } from '@/data/Tracks';
 
 type TrackPlayerInput = {
     tracks: Track[];
+    trackID: string
 };
 
-const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
+const TrackPlayer = ({ tracks, trackID }: TrackPlayerInput) => {
     const [currTrackIndex, setCurrTrackIndex] = useState(0);
     const [currentTrackMeta, setCurrentTrackMeta] = useState<IAudioMetadata>();
     const [isPlaying, setIsPlaying] = useState(false);
@@ -85,6 +86,13 @@ const TrackPlayer = ({ tracks }: TrackPlayerInput) => {
         setIsPlaying(true);
     }, [changedTrackTrigger]);
 
+
+    useEffect(() => {
+        if (trackID) {
+            let startTrackIndex = tracks.findIndex(track => track.id === trackID)
+            setCurrTrackIndex(startTrackIndex)
+        } 
+    }, [])
 
     // Should remove?
     const onEnd = () => {

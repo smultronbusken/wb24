@@ -5,6 +5,8 @@ import * as mm from 'music-metadata';
 import TrackPlayerToggle from '@/components/BarToggle';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Track } from '@/data/Tracks';
+import { useParams } from 'react-router-dom';
+
 
 
 
@@ -22,11 +24,17 @@ const MainPage = () => {
         setTracks(json.tracks)
     }
 
+    let { trackID } = useParams();
+    
+
+
     return (
         <div className="bg-slate-700">
-            {
+
+            {   
+            
                 tracks ? 
-                    <TrackPlayer tracks={tracks} />
+                    <TrackPlayer tracks={tracks} trackID={trackID} />
                 :
                     
                     <div className='absolute w-full h-full flex items-center align-center justify-center'>
