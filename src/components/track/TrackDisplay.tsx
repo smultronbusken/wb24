@@ -1,5 +1,5 @@
 import { FaBars } from 'react-icons/fa';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import {
     DrawerTrigger,
     DrawerContent,
@@ -9,10 +9,10 @@ import {
     DrawerFooter,
     DrawerClose,
     Drawer,
-} from './ui/drawer';
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from './ui/carousel';
-import { Card, CardContent } from './ui/card';
-import TrackList from './TrackList';
+} from '../ui/drawer';
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '../ui/carousel';
+import { Card, CardContent } from '../ui/card';
+import TrackList from '../track_explorer/TrackList';
 import React from 'react';
 const TrackDisplay = ({ tracks, track, trackIndex }) => {
     return (

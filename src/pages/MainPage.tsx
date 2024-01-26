@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import TrackPlayer from '../components/TrackPlayer';
+import TrackPlayer from '../components/track/TrackPlayer';
 import React from 'react';
 import * as mm from 'music-metadata';
-import TrackPlayerToggle from '@/components/BarToggle';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
+import TrackPlayerToggle from '@/components/track_explorer/BarToggle';
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { Track } from '@/data/Tracks';
 import { useParams } from 'react-router-dom';
 

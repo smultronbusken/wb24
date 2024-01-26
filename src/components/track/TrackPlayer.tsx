@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import TrackControls from './TrackControls';
 import React from 'react';
-import Subtitle from './Subtitle';
-import AudioPlayer from './AudioPlayer';
-import CanvasBackground from './CanvasBackground';
+import Subtitle from '../subtitle/Subtitle';
+import AudioPlayer from '../audio/AudioPlayer';
+import CanvasBackground from '../background/CanvasBackground';
 import TrackDisplay from './TrackDisplay';
-import BarToggle from './BarToggle';
+import BarToggle from '../track_explorer/BarToggle';
 import {
     Drawer,
     DrawerClose,
@@ -15,16 +15,16 @@ import {
     DrawerHeader,
     DrawerTitle,
     DrawerTrigger,
-} from './ui/drawer';
-import { Button } from './ui/button';
+} from '../ui/drawer';
+import { Button } from '../ui/button';
 import { FaBars } from 'react-icons/fa';
-import TrackList from './TrackList';
-import TrackListDrawer from './TrackListDrawer';
-import { Separator } from './ui/separator';
+import TrackList from '../track_explorer/TrackList';
+import TrackListDrawer from '../track_explorer/TrackListDrawer';
+import { Separator } from '../ui/separator';
 import { IAudioMetadata } from 'music-metadata-browser';
 import ProgressBar from './Progressbar';
 import TrackProgress from './TrackProgress';
-import { LoadingSpinner } from './LoadingSpinner';
+import { LoadingSpinner } from '../ui/LoadingSpinner';
 import { Track } from '@/data/Tracks';
 
 type TrackPlayerInput = {

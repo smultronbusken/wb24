@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import AudioControls from './AudioControls';
-import { Track } from '../data/Tracks';
+
 import * as musicMetadata from 'music-metadata-browser';
 import React from 'react';
+import { Track } from '@/data/Tracks';
 
 
 type AudioPlayerProps = {

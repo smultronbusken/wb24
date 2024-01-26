@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaPlay, FaPause, FaStepForward, FaStepBackward, FaVolumeUp, FaBars } from 'react-icons/fa'; // Import additional icons
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
-import { Separator } from './ui/separator';
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
+import { Separator } from '../ui/separator';
 
 const TrackControls = ({ onNext, onPrev, onTogglePlay, isPlaying }) => {
     return (

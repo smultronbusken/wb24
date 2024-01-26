@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaBars, FaVolumeUp, FaVolumeDown, FaVolumeMute, FaVolumeOff } from 'react-icons/fa';
-import { Slider } from './ui/slider';
+import { Slider } from '../ui/slider';
 
 const AudioControls = ({ onChangeVolume, onMute, currentVolume }) => {
     let VolumeIcon = FaVolumeUp;
