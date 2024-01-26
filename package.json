@@ -1,6 +1,7 @@
 {
   "private": true,
   "version": "0.0.0",
+  "name": "wb24",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
