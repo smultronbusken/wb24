@@ -29,7 +29,7 @@ import { Track } from '@/data/Tracks';
 
 type TrackPlayerInput = {
     tracks: Track[];
-    trackID: string
+    trackID: string | undefined
 };
 
 const TrackPlayer = ({ tracks, trackID }: TrackPlayerInput) => {
